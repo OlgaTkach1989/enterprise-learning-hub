@@ -7,8 +7,8 @@
     <img src="https://img.shields.io/badge/Enterprise%20Learning-013444?style=flat-square" alt="Enterprise Learning" />
     <img src="https://img.shields.io/badge/Guided%20Lessons-0381A9?style=flat-square" alt="Guided Lessons" />
     <img src="https://img.shields.io/badge/Interactive%20Practice-E7C66A?style=flat-square&amp;labelColor=013444" alt="Interactive Practice" />
-    <img src="https://img.shields.io/badge/AI%20Assistance-244B5A?style=flat-square" alt="AI Assistance" />
-    <img src="https://img.shields.io/badge/Governance-013444?style=flat-square" alt="Governance" />
+    <img src="https://img.shields.io/badge/Governed%20AI-244B5A?style=flat-square" alt="Governed AI" />
+    <img src="https://img.shields.io/badge/Knowledge%20Retrieval-0381A9?style=flat-square" alt="Knowledge Retrieval" />
     <img src="https://img.shields.io/badge/Completion%20Evidence-E7C66A?style=flat-square&amp;labelColor=013444" alt="Completion Evidence" />
   </p>
 </div>
@@ -73,6 +73,58 @@ Learning Hub is structured around four connected product surfaces.
 6. **Produce trusted evidence**  
    The platform can issue completion evidence so managers and academy operators can see not only participation, but confirmed outcomes.
 
+## Governed AI Architecture
+
+AI in Learning Hub is not a single chatbot feature. It is a controlled learning and content-operations layer that supports discovery, guided study, practical work, course creation, and administrative oversight.
+
+### AI Capability Map
+
+| AI subsystem | User value | Control model |
+| --- | --- | --- |
+| **Public Course Finder** | Helps visitors discover relevant learning paths in the public catalog | Uses public catalog context only |
+| **Lesson Assistant** | Answers learner questions and supports lesson comprehension | Context is assembled from the active structured lesson and, when supplied, the learner's practice input |
+| **Training Knowledge Assistant** | Delivers content-grounded answers with citations and follow-up prompts | Retrieval is limited to learning content visible to the authenticated learner |
+| **AI Quiz Engine** | Generates knowledge checks and returns learner feedback | Quiz scoring is performed on the server and attempts are retained |
+| **Notebook / Jupyter Assistant** | Brings guidance into hands-on notebook exercises | Protected runtime proxy resolves notebook and related lesson context before calling the configured AI provider |
+| **Course Builder Orchestration** | Creates lesson drafts from approved text or transcribed video source material | Produces reviewable lesson structures; it does not publish content or decide access |
+| **AI Governance Console** | Gives administrators visibility into unresolved answers, index health, provider status, and operational risk | Human assignment, resolution notes, escalation handling, and audit records remain part of the workflow |
+
+### AI Processing Flow
+
+| Stage | How the platform handles it |
+| --- | --- |
+| **1. Managed source content** | Training content can be maintained through the content-management workflow and synchronized into the learning domain. Published content is eligible for AI indexing; retired or unpublished content is removed from active retrieval. |
+| **2. Knowledge indexing** | Content is divided into traceable chunks with section labels, snippets, checksums, and embedding metadata. The platform supports vector-based retrieval through PostgreSQL/pgvector with an application-level fallback strategy. |
+| **3. Permission-aware retrieval** | The assistant starts from the learner's active content and only expands to referenced material that the user is allowed to see. Hidden cross-references are not exposed as AI citations. |
+| **4. Provider execution** | A provider layer supports deterministic demo behaviour and a configured OpenAI-compatible runtime. This keeps the product demonstrable without external AI dependencies while allowing production integration. |
+| **5. Response and assessment** | AI responses can include citations, suggested follow-up prompts, and a resolution status. AI-generated quizzes become trackable attempts with server-side evaluation. |
+| **6. Human governance** | Partial or escalation-required answers can enter an administrative review queue, be routed to a responsible course owner, receive a resolution note, and be resolved or archived. |
+| **7. Audit and analytics** | The platform tracks AI questions, response failures, quiz events, escalations, index rebuilds, content synchronization health, unresolved workload, and FAQ coverage. |
+
+### Content Generation and Authoring Support
+
+The content-production layer supports AI-assisted lesson drafting while preserving review and publishing responsibility:
+
+- Lesson drafts can be assembled from approved source text into a structured flow of theory, concept, video, quiz, practice, and wrap-up.
+- Video-based lesson creation can transcribe uploaded source material and turn the transcript into a reviewable lesson draft.
+- A conservative provider-based path remains available as a stable baseline.
+- An optional agent-orchestrated path can create structured lesson blueprints, including quiz and practice material, from approved context.
+- If AI generation is unavailable or insufficient, the workflow falls back to a deterministic structured draft rather than blocking content work.
+
+### AI Safety and Accountability
+
+The AI layer is designed around accountability rather than unrestricted generation:
+
+- authenticated access for learner-facing training AI;
+- visibility-scoped retrieval and citation boundaries;
+- controlled notebook runtime tokens for AI interaction inside Jupyter-based practice;
+- rate-limited AI and synchronization operations;
+- audit events for questions, responses, escalations, quizzes, index rebuilds, notebook actions, and failures;
+- human-owned resolution workflow for answers that are incomplete or require escalation;
+- administration metrics for stale knowledge, unindexed published content, provider configuration, failed operations, and owner gaps.
+
+This structure is important for enterprise learning: AI helps users move faster, while content ownership, access rights, publishing decisions, and evidence remain governable.
+
 ## Key Capabilities
 
 ### Structured Learning Delivery
@@ -103,12 +155,12 @@ Learning Hub is structured around four connected product surfaces.
 - Accountability assignments for academy, course, and cohort scopes
 - Audit and governance signals for operational review
 
-### AI-Supported Learning
+### AI-Supported Learning and Governance
 
-- Learning assistance grounded in visible course material
-- Quiz-generation and knowledge-support workflows
-- Administrative visibility into unresolved AI items and knowledge coverage
-- Audit events for important AI interactions
+- Public catalog guidance, in-lesson support, and content-grounded learner assistance
+- Permission-aware knowledge retrieval with citations and follow-up guidance
+- AI quiz attempts, notebook support, lesson-authoring assistance, and video-to-lesson drafting
+- Administrative oversight of escalations, knowledge-index health, AI usage signals, and resolution ownership
 
 ### Completion and Evidence
 
@@ -157,12 +209,14 @@ This case study provides a strong basis for an interview discussion about:
 - How a learning product can serve different roles without fragmenting the user journey
 - How guided content, live delivery, and practical assignments form one measurable training experience
 - Why governance, auditability, and completion evidence matter in enterprise software
-- How AI assistance can be introduced with visibility and control rather than as an uncontrolled feature
+- How permission-aware retrieval/RAG, pgvector-backed indexing, and citations support trustworthy learner assistance
+- How human-in-the-loop AI governance handles escalation, ownership, resolution, and analytics
+- How agent-orchestrated lesson drafting can accelerate authoring while preserving review and publishing control
 - How a platform moves from a learning portal toward a credible enterprise learning workspace
 
 ## Keywords
 
-`enterprise-learning` `learning-management` `internal-academy` `learner-experience` `instructor-workspace` `admin-console` `course-governance` `interactive-practice` `jupyterlab` `ai-assistant` `auditability` `completion-evidence` `role-based-access` `onboarding` `upskilling`
+`enterprise-learning` `learning-management` `internal-academy` `learner-experience` `instructor-workspace` `admin-console` `course-governance` `interactive-practice` `jupyterlab` `ai-assistant` `rag` `pgvector` `ai-governance` `human-in-the-loop` `agent-orchestration` `auditability` `completion-evidence` `role-based-access` `onboarding` `upskilling`
 
 ## Portfolio Note
 
